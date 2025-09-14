@@ -1,24 +1,23 @@
+require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
+const leadRoutes = require('./routes/LeadRoutes');
 
 const app = express();
-const PORT = 6006;
+app.use(express.json());
 
-const {MongoClient} = require('mongodb');
-const dotenv = require('dotenv');
-dotenv.config();
-
-
-app.get('/',(req,res)=>{
-    res.send('Hello World');
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
 })
+.then(() => console.log('MongoDB Connected'))
+.catch(err => console.error('MongoDB connection error:', err));
 
-MongoClient.connect(process.env.MONGO_URI, {
-    // useNewUrlParser: true,
-    // useUnifiedTopology: true
-}).then(() => console.log('MongoDB Connected'))
-.catch((error)=>{
-    console.log('err',error)
+// Routes
+app.use('/api', leadRoutes);
+
+// Catch-all 404
+app.use((req, res) => {
+    res.status(404).json({ success: false, error: 'Route not found' });
 });
-app.listen(PORT,()=>{
-    console.log(`App Listening on Port ${PORT}`)
-})
+
+app.listen(6006, () => console.log('App Listening on Port 6006'));
