@@ -1,9 +1,7 @@
-const Lead = require('../models/Lead.js');
+const Lead = require('../models/Lead');
 
 // Create Lead
-
-
-    const createLead =async (req, res) => {
+        const createLead =async (req, res) => {
         try {
             const { name, email, phone, message } = req.body;
 
@@ -18,7 +16,7 @@ const Lead = require('../models/Lead.js');
                 message
             });
 
-            const savedLead = await newLead.save();  // Proper async save
+            const savedLead = await newLead.save();
 
             return res.status(201).json({ success: true, data: savedLead });
         } catch (error) {
